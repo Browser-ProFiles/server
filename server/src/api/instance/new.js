@@ -13,7 +13,6 @@ router.post('/', async (req, res) => {
     const udd = path.resolve(os.homedir(), 'chrome-browser');
     const upd = path.resolve(udd, String(body.name || Date.now()));
 
-    console.log('upd', upd)
     const FLAGS = [
       '--profiling-flush=1000',
       '--enable-aggressive-domstorage-flushing',
@@ -25,8 +24,6 @@ router.post('/', async (req, res) => {
       // @see https://stackoverflow.com/questions/59928635/enable-or-disable-webgl
       '--disable-3d-apis',
       '--disable-webgl',
-
-      '--langauge=de'
     ];
 
     const PREFS = {};
@@ -38,10 +35,11 @@ router.post('/', async (req, res) => {
 
     if (body.system.timezone) {
       ENV_VARS['TZ'] = body.system.timezone;
-      ENV_VARS['LANGUAGE'] = 'es';
     }
 
-    PREFS['intl.allowed_languages'] = 'de';
+    if (body.system.language) {
+      FLAGS.push(`--accept-lang=${body.system.language}`);
+    }
 
     if (body.identity.siteIsolation) {
       FLAGS.push('--enable-site-per-process');
@@ -54,10 +52,6 @@ router.post('/', async (req, res) => {
     if (body.proxy.enabled) {
       FLAGS.push(`--proxy-server=${body.proxy.host}:${body.proxy.port}`);
     }
-
-    console.log('FLAGS', FLAGS);
-    console.log('PREFS', PREFS);
-    console.log('ENV_VARS', ENV_VARS);
 
     ChromeLauncher.launch({
       chromeFlags: FLAGS,
