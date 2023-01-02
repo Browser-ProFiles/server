@@ -1,9 +1,9 @@
 const express = require('express');
 
-const test = require('./test');
+const newInstance = require('./instance/new');
 
 const router = express.Router();
 
-router.use('/test', test);
+router.use('/instance/create', newInstance);
 
 module.exports = router;
