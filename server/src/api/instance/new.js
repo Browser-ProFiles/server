@@ -24,16 +24,24 @@ router.post('/', async (req, res) => {
       // When the 3D api's are disabled, LightningChart JS will fail to render and will throw an error.
       // @see https://stackoverflow.com/questions/59928635/enable-or-disable-webgl
       '--disable-3d-apis',
-      '--disable-webgl'
+      '--disable-webgl',
+
+      '--langauge=de'
     ];
+
+    const PREFS = {};
+    const ENV_VARS = {};
 
     if (body.screen) {
       FLAGS.push(`--window-size=${body.screen.width},${body.screen.height}`);
     }
 
     if (body.system.timezone) {
-      FLAGS.push(`--TZ=${body.system.timezone}`);
+      ENV_VARS['TZ'] = body.system.timezone;
+      ENV_VARS['LANGUAGE'] = 'es';
     }
+
+    PREFS['intl.allowed_languages'] = 'de';
 
     if (body.identity.siteIsolation) {
       FLAGS.push('--enable-site-per-process');
@@ -48,9 +56,13 @@ router.post('/', async (req, res) => {
     }
 
     console.log('FLAGS', FLAGS);
+    console.log('PREFS', PREFS);
+    console.log('ENV_VARS', ENV_VARS);
 
     ChromeLauncher.launch({
       chromeFlags: FLAGS,
+      prefs: PREFS,
+      envVars: ENV_VARS,
       logLevel: 'verbose'
     }).then(chrome => {
       console.log(`Chrome debugging port running on ${chrome.port}`);
