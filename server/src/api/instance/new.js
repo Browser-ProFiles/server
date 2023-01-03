@@ -3,6 +3,7 @@ const os = require ('os');
 const express = require('express');
 const ChromeLauncher = require('chrome-launcher');
 const proxyChain = require('proxy-chain');
+const {FLAG_MAP} = require("../../mappers/flagMappers");
 
 const router = express.Router();
 
@@ -13,49 +14,50 @@ router.post('/', async (req, res) => {
     const udd = path.resolve(os.homedir(), 'chrome-browser');
     const upd = path.resolve(udd, String(body.name || Date.now()));
 
-    // todo: session storage (cookies), extensions, apps, webgl, canvas, -> article, memory, screen
-    // then -> checkers
-
     const FLAGS = [
       '--profiling-flush=1000',
       '--enable-aggressive-domstorage-flushing',
       '--restore-last-session',
       '--disk-cache-size=2750000000',
       `--profile-directory="${upd}"`,
-
-      // When the 3D api's are disabled, LightningChart JS will fail to render and will throw an error.
-      // @see https://stackoverflow.com/questions/59928635/enable-or-disable-webgl
-      '--disable-3d-apis',
-      '--disable-webgl',
       '--guest'
     ];
 
     const PREFS = {};
     const ENV_VARS = {};
 
-    if (body.screen) {
-      FLAGS.push(`--window-size=${body.screen.width},${body.screen.height}`);
+    // Manual settings
+    if (body.width && body.height) {
+      FLAGS.push(`--window-size=${body.width},${body.height}`);
     }
 
-    if (body.system.timezone) {
-      ENV_VARS['TZ'] = body.system.timezone;
+    if (body.timezone) {
+      ENV_VARS['TZ'] = body.timezone;
     }
 
-    if (body.system.language) {
-      FLAGS.push(`--accept-lang=${body.system.language}`);
+    if (body.proxyEnabled) {
+      FLAGS.push(`--proxy-server=${body.proxyHost}:${body.proxyPort}`);
+      // TODO: proxyAuthEnabled
     }
 
-    if (body.identity.siteIsolation) {
-      FLAGS.push('--enable-site-per-process');
-    }
+    // Auto settings
+    const keys = Object.entries(body);
+    keys.forEach(([key, value]) => {
+      if (FLAG_MAP[key]) {
+        const flag = FLAG_MAP[key];
 
-    if (body.identity.userAgent) {
-      FLAGS.push(`--user-agent=${body.identity.userAgent}`);
-    }
+        if (!value) return;
 
-    if (body.proxy.enabled) {
-      FLAGS.push(`--proxy-server=${body.proxy.host}:${body.proxy.port}`);
-    }
+        if (typeof flag == 'boolean') {
+          FLAGS.push(`--${key}`);
+          return;
+        }
+
+        FLAGS.push(`--${key}=${value}`);
+      }
+    })
+
+    console.log('FLAGS', FLAGS)
 
     ChromeLauncher.launch({
       chromeFlags: FLAGS,
