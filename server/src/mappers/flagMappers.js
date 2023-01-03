@@ -1,4 +1,4 @@
-export const FLAG_MAP = {
+module.exports = {
     touchDevices: '--touch-devices',
     touchEvents: '--touch-events',
 

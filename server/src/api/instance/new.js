@@ -3,7 +3,8 @@ const os = require ('os');
 const express = require('express');
 const ChromeLauncher = require('chrome-launcher');
 const proxyChain = require('proxy-chain');
-const {FLAG_MAP} = require("../../mappers/flagMappers");
+
+const FLAG_MAP = require('../../mappers/flagMappers');
 
 const router = express.Router();
 
@@ -73,6 +74,7 @@ router.post('/', async (req, res) => {
       'status': 'success'
     });
   } catch (e) {
+    console.log('e', e)
     res.status(400).send({
       'status': 'error',
       'error': e,
