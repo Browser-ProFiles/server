@@ -13,6 +13,9 @@ router.post('/', async (req, res) => {
     const udd = path.resolve(os.homedir(), 'chrome-browser');
     const upd = path.resolve(udd, String(body.name || Date.now()));
 
+    // todo: session storage (cookies), extensions, apps, webgl, canvas, -> article, memory, screen
+    // then -> checkers
+
     const FLAGS = [
       '--profiling-flush=1000',
       '--enable-aggressive-domstorage-flushing',
@@ -24,6 +27,7 @@ router.post('/', async (req, res) => {
       // @see https://stackoverflow.com/questions/59928635/enable-or-disable-webgl
       '--disable-3d-apis',
       '--disable-webgl',
+      '--guest'
     ];
 
     const PREFS = {};
@@ -57,7 +61,8 @@ router.post('/', async (req, res) => {
       chromeFlags: FLAGS,
       prefs: PREFS,
       envVars: ENV_VARS,
-      logLevel: 'verbose'
+      logLevel: 'verbose',
+      ignoreDefaultFlags: true
     }).then(chrome => {
       console.log(`Chrome debugging port running on ${chrome.port}`);
     });
