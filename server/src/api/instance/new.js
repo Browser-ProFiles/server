@@ -1,10 +1,17 @@
 const path = require('path');
 const os = require ('os');
 const express = require('express');
-const ChromeLauncher = require('chrome-launcher');
-const proxyChain = require('proxy-chain');
+const puppeteer = require('puppeteer-extra');
+const useProxy = require('puppeteer-page-proxy');
 
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+// const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker');
+
+const { executablePath } = require('puppeteer');
 const FLAG_MAP = require('../../mappers/flagMappers');
+
+puppeteer.use(StealthPlugin());
+// puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
 
 const router = express.Router();
 
@@ -19,10 +26,9 @@ router.post('/', async (req, res) => {
       '--profiling-flush=10',
       '--restore-last-session',
       '--enable-aggressive-domstorage-flushing',
-      `--user-data-dir=${userDataDir}`,
+      // '--no-sandbox'
     ];
 
-    const PREFS = {};
     const ENV_VARS = {};
 
     // Manual settings
@@ -32,11 +38,6 @@ router.post('/', async (req, res) => {
 
     if (body.timezone) {
       ENV_VARS['TZ'] = body.timezone;
-    }
-
-    if (body.proxyEnabled) {
-      FLAGS.push(`--proxy-server=${body.proxyHost}:${body.proxyPort}`);
-      // TODO: proxyAuthEnabled
     }
 
     // Auto settings
@@ -54,19 +55,54 @@ router.post('/', async (req, res) => {
 
         FLAGS.push(`--${key}=${value}`);
       }
-    })
-
-    console.log('FLAGS', FLAGS)
-
-    ChromeLauncher.launch({
-      chromeFlags: FLAGS,
-      prefs: PREFS,
-      envVars: ENV_VARS,
-      logLevel: 'verbose',
-      ignoreDefaultFlags: true
-    }).then(chrome => {
-      console.log(`Chrome debugging port running on ${chrome.port}`);
     });
+
+    const LAUNCH_OPTIONS = {
+      headless: false,
+      devtools: true,
+      ignoreDefaultArgs: true,
+      ignoreHTTPSErrors: true,
+      executablePath: executablePath(),
+      product: 'chrome',
+      slowMo: 0,
+      userDataDir: userDataDir,
+      args: FLAGS,
+      env: ENV_VARS,
+      // executablePath: ''
+      // logLevel: 'verbose',
+      // chromePath
+    };
+
+    const browser = await puppeteer.launch(LAUNCH_OPTIONS);
+
+    const page = await browser.newPage()
+    page.goto('about:blank');
+
+    const pages = await browser.pages();
+    console.log('pages', pages)
+    await pages[0].close();
+
+    if (body.proxyEnabled) {
+      let proxyUrl;
+
+      if (body.proxyAuthEnabled) {
+        proxyUrl = `${body.proxyType}://${body.proxyUsername}:${body.proxyPassword}@${body.proxyHost}:${body.proxyPort}`;
+      } else {
+        proxyUrl = `${body.proxyType}://${body.proxyHost}:${body.proxyPort}`;
+      }
+
+      const pages = await browser.pages();
+      for (const page of pages) {
+        await useProxy(page, proxyUrl);
+      }
+
+      browser.on('targetcreated', async (target) => {
+        const page = await target.page();
+        if (!page) return;
+
+        await useProxy(page, proxyUrl);
+      });
+    }
 
     res.json({
       'status': 'success'
