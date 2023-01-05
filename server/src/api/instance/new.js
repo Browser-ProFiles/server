@@ -13,15 +13,13 @@ router.post('/', async (req, res) => {
     const body = req.body;
 
     const udd = path.resolve(os.homedir(), 'chrome-browser');
-    const upd = path.resolve(udd, String(body.name || Date.now()));
+    const userDataDir = path.resolve(udd, String(body.name || Date.now()));
 
     const FLAGS = [
-      '--profiling-flush=1000',
-      '--enable-aggressive-domstorage-flushing',
+      '--profiling-flush=10',
       '--restore-last-session',
-      '--disk-cache-size=2750000000',
-      `--profile-directory="${upd}"`,
-      '--guest'
+      '--enable-aggressive-domstorage-flushing',
+      `--user-data-dir=${userDataDir}`,
     ];
 
     const PREFS = {};
