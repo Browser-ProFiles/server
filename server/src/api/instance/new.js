@@ -75,6 +75,12 @@ router.post('/', async (req, res) => {
 
     const browser = await puppeteer.launch(LAUNCH_OPTIONS);
 
+    const page = await browser.newPage()
+    page.goto('https://google.com');
+
+    const pages = await browser.pages();
+    await pages[0].close();
+
     if (body.proxyEnabled) {
       let proxyUrl;
 
@@ -83,6 +89,8 @@ router.post('/', async (req, res) => {
       } else {
         proxyUrl = `${body.proxyType}://${body.proxyHost}:${body.proxyPort}`;
       }
+
+      console.log('proxyUrl', proxyUrl)
 
       const pages = await browser.pages();
       for (const page of pages) {
@@ -96,8 +104,6 @@ router.post('/', async (req, res) => {
         await useProxy(page, proxyUrl);
       });
     }
-
-    console.log('HERE')
 
     res.json({
       'status': 'success'
