@@ -56,24 +56,23 @@ export default async (req, res) => {
       // chromePath
     };
 
-    const hasWithSameName = await Profile.findOne({
+    console.log('user', req.user)
+    const profile = await Profile.findOne({
       where: {
         userId: req.user.id,
-        name: body.name,
+        name: req.body.name,
       },
     });
 
-    if (hasWithSameName) {
-      res.status(400).send({
+    if (!profile) {
+      res.status(404).send({
         status: 'error',
-        error: 'Profile with same name already exists.',
+        error: 'Profile not found',
       });
     }
 
-    console.log('user', req.user)
-    await Profile.create({
+    await profile.edit({
       userId: req.user.id,
-      name: body.name || Date.now(),
       options: JSON.stringify(data)
     });
 
