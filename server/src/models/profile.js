@@ -12,6 +12,10 @@ module.exports = (sequelize, Sequelize) => {
         options: {
             type: Sequelize.TEXT,
             allowNull: false,
+        },
+        form: {
+            type: Sequelize.TEXT,
+            allowNull: false,
         }
     });
 

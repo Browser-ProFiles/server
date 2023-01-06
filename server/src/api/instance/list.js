@@ -4,7 +4,7 @@ const Profile = db.profile;
 module.exports = async (req, res) => {
   try {
     const profiles = await Profile.findAll({
-      userId: req.session.id,
+      userId: req.user.id,
     });
 
     res.json({
@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
 
     res.status(400).send({
       status: 'error',
-      error: e,
+      message: e,
     });
   }
 };

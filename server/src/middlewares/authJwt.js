@@ -13,19 +13,22 @@ const verifyToken = (req, res, next) => {
     }
 
     jwt.verify(token, config.secret, (err, decoded) => {
-        if (err) {
+        if (err || !decoded) {
             return res.status(401).send({
                 message: 'Unauthorized!',
             });
         }
-        req.userId = decoded.id;
+        if (!req.user) {
+            req.user = {};
+        }
+        req.user.id = decoded.id;
         next();
     });
 };
 
 const hasEnoughSubscription = async (req, res, next) => {
     try {
-        const user = await User.findByPk(req.userId);
+        const user = await User.findByPk(req.user.id);
         const roles = await user.getRoles();
 
         for (let i = 0; i < roles.length; i++) {
@@ -35,10 +38,8 @@ const hasEnoughSubscription = async (req, res, next) => {
         }
 
         const profiles = await user.getProfiles();
-        console.log('profiles', profiles)
         const subscription = await user.getSubscription();
-        console.log('subscription', subscription)
-        if (subscription.maxProfiles < profiles.length) {
+        if (subscription.maxProfiles <= profiles.length) {
             return res.status(403).send({
                 message: 'Too many profiles. Change the subscription',
             });
@@ -46,6 +47,7 @@ const hasEnoughSubscription = async (req, res, next) => {
 
         return next();
     } catch (error) {
+        console.log(error)
         return res.status(500).send({
             message: 'Unable to validate User role!',
         });
@@ -54,7 +56,7 @@ const hasEnoughSubscription = async (req, res, next) => {
 
 const isAdmin = async (req, res, next) => {
     try {
-        const user = await User.findByPk(req.userId);
+        const user = await User.findByPk(req.user.id);
         const roles = await user.getRoles();
 
         for (let i = 0; i < roles.length; i++) {

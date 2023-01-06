@@ -2,10 +2,12 @@ const db = require('../../models');
 const Profile = db.profile;
 
 const FLAG_MAP = require('../../mappers/flagMappers');
+const { flat } = require('../../helpers/flat');
 
 module.exports = async (req, res) => {
   try {
-    const body = req.body;
+    const rawBody = req.body;
+    const body = flat(req.body);
 
     const FLAGS = [
       '--profiling-flush=10',
@@ -56,10 +58,9 @@ module.exports = async (req, res) => {
       // chromePath
     };
 
-    console.log('user', req.user)
     const profile = await Profile.findOne({
       where: {
-        userId: req.session.id,
+        userId: req.user.id,
         name: req.params.name,
       },
     });
@@ -67,14 +68,20 @@ module.exports = async (req, res) => {
     if (!profile) {
       res.status(404).send({
         status: 'error',
-        error: 'Profile not found',
+        message: 'Profile not found',
       });
     }
 
-    await profile.edit({
-      userId: req.session.id,
+    await profile.update({
+      userId: req.user.id,
       name: req.params.name,
-      options: JSON.stringify(data)
+      options: JSON.stringify(data),
+      form: JSON.stringify(rawBody),
+    }, {
+      where: {
+        userId: req.user.id,
+        name: req.params.name,
+      }
     });
 
     res.json({
@@ -86,7 +93,7 @@ module.exports = async (req, res) => {
 
     res.status(400).send({
       status: 'error',
-      error: e,
+      message: e,
     });
   }
 };

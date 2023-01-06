@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
   try {
     const hasProfile = await Profile.findOne({
       where: {
-        userId: req.session.id,
+        userId: req.user.id,
         name: req.params.name,
       },
     });
@@ -13,13 +13,13 @@ module.exports = async (req, res) => {
     if (!hasProfile) {
       res.status(404).send({
         status: 'error',
-        error: 'Profile not found.',
+        message: 'Profile not found.',
       });
     }
 
     await Profile.destroy({
       where: {
-        userId: req.session.id,
+        userId: req.user.id,
         name: req.params.name,
       },
     });
@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
 
     res.status(400).send({
       status: 'error',
-      error: e,
+      message: e,
     });
   }
 };

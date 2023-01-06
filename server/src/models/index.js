@@ -43,6 +43,8 @@ db.user.belongsToMany(db.role, {
 
 db.user.belongsTo(db.subscription);
 
+db.user.hasMany(db.profile);
+
 db.profile.belongsTo(db.user);
 
 /*db.track.hasMany(db.trackHistory, {

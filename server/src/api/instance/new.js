@@ -2,10 +2,12 @@ const db = require('../../models');
 const Profile = db.profile;
 
 const FLAG_MAP = require('../../mappers/flagMappers');
+const { flat } = require('../../helpers/flat');
 
 module.exports = async (req, res) => {
   try {
-    const body = req.body;
+    const rawBody = req.body;
+    const body = flat(req.body);
 
     const FLAGS = [
       '--profiling-flush=10',
@@ -58,7 +60,7 @@ module.exports = async (req, res) => {
 
     const hasWithSameName = await Profile.findOne({
       where: {
-        userId: req.session.id,
+        userId: req.user.id,
         name: body.name,
       },
     });
@@ -66,15 +68,15 @@ module.exports = async (req, res) => {
     if (hasWithSameName) {
       res.status(400).send({
         status: 'error',
-        error: 'Profile with same name already exists.',
+        message: 'Profile with same name already exists.',
       });
     }
 
-    console.log('user', req.user)
     await Profile.create({
-      userId: req.session.id,
+      userId: req.user.id,
       name: body.name || Date.now(),
-      options: JSON.stringify(data)
+      options: JSON.stringify(data),
+      form: JSON.stringify(rawBody),
     });
 
     res.json({
@@ -86,7 +88,7 @@ module.exports = async (req, res) => {
 
     res.status(400).send({
       status: 'error',
-      error: e,
+      message: e,
     });
   }
 };
