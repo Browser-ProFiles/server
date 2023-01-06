@@ -59,8 +59,8 @@ module.exports = async (req, res) => {
     console.log('user', req.user)
     const profile = await Profile.findOne({
       where: {
-        userId: req.user.id,
-        name: req.body.name,
+        userId: req.session.id,
+        name: req.params.name,
       },
     });
 
@@ -72,7 +72,8 @@ module.exports = async (req, res) => {
     }
 
     await profile.edit({
-      userId: req.user.id,
+      userId: req.session.id,
+      name: req.params.name,
       options: JSON.stringify(data)
     });
 

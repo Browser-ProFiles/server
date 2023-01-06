@@ -4,7 +4,7 @@ const Profile = db.profile;
 module.exports = async (req, res) => {
   try {
     const profiles = await Profile.findAll({
-      userId: req.user.id,
+      userId: req.session.id,
     });
 
     res.json({

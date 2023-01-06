@@ -4,7 +4,7 @@ const Profile = db.profile;
 module.exports = async (req, res) => {
   try {
     const profile = await Profile.findOne({
-      userId: req.user.id,
+      userId: req.session.id,
       name: req.params.name || Date.now(),
     });
 

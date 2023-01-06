@@ -58,7 +58,7 @@ module.exports = async (req, res) => {
 
     const hasWithSameName = await Profile.findOne({
       where: {
-        userId: req.user.id,
+        userId: req.session.id,
         name: body.name,
       },
     });
@@ -72,7 +72,7 @@ module.exports = async (req, res) => {
 
     console.log('user', req.user)
     await Profile.create({
-      userId: req.user.id,
+      userId: req.session.id,
       name: body.name || Date.now(),
       options: JSON.stringify(data)
     });

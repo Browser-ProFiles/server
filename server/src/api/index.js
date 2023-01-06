@@ -26,7 +26,7 @@ router.get('/instance/view/:name', [authJwt.verifyToken], viewInstance);
 
 router.post('/instance/create', [authJwt.verifyToken, authJwt.hasEnoughSubscription], newInstance);
 router.post('/instance/launch', [authJwt.verifyToken], launchInstance);
-router.patch('/instance/edit', [authJwt.verifyToken], editInstance);
-router.delete('/instance/remove', [authJwt.verifyToken], removeInstance);
+router.patch('/instance/edit/:name', [authJwt.verifyToken], editInstance);
+router.delete('/instance/remove/:name', [authJwt.verifyToken], removeInstance);
 
 module.exports = router;

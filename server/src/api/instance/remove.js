@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
   try {
     const hasProfile = await Profile.findOne({
       where: {
-        userId: req.user.id,
+        userId: req.session.id,
         name: req.params.name,
       },
     });
@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
 
     await Profile.destroy({
       where: {
-        userId: req.user.id,
+        userId: req.session.id,
         name: req.params.name,
       },
     });
