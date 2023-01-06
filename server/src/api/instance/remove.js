@@ -1,7 +1,7 @@
 const db = require('../../models');
 const Profile = db.profile;
 
-export default async (req, res) => {
+module.exports = async (req, res) => {
   try {
     const hasProfile = await Profile.findOne({
       where: {

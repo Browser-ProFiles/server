@@ -1,9 +1,8 @@
+const bcrypt = require('bcryptjs');
 const db = require('../../models');
 const User = db.user;
 
-import bcrypt from 'bcryptjs';
-
-export default async (req, res) => {
+module.exports = async (req, res) => {
     try {
         const ip = req.headers['X-FORWARDED-FOR'] || req.connection.remoteAddress;
 

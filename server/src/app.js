@@ -39,7 +39,7 @@ db.sequelize.sync();
 
 app.use('/api/v1', api);
 
-function initial() {
+function initRoles() {
     Role.create({
         id: 1,
         name: "user",
@@ -49,7 +49,9 @@ function initial() {
         id: 2,
         name: "admin",
     });
+}
 
+function initSubscriptions() {
     Subscription.create({
         id: 1,
         maxProfiles: 2,
@@ -74,5 +76,8 @@ function initial() {
         price: 100,
     });
 }
+
+// initSubscriptions()
+// initRoles()
 
 module.exports = app;

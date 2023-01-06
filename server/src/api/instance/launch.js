@@ -11,7 +11,7 @@ const os = require("os");
 puppeteer.use(StealthPlugin());
 // puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
 
-export default async (req, res) => {
+module.exports = async (req, res) => {
     try {
         // TODO: Get db row
 
@@ -71,5 +71,3 @@ export default async (req, res) => {
         });
     }
 };
-
-module.exports = router;

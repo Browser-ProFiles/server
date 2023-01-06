@@ -14,10 +14,6 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false
         },
 
-        subscriptionId: {
-            type: Sequelize.INTEGER,
-            allowNull: true,
-        },
         subscriptionActiveUntil: {
             type: Sequelize.INTEGER,
             allowNull: true

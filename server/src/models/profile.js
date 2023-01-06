@@ -5,12 +5,8 @@ module.exports = (sequelize, Sequelize) => {
             primaryKey: true,
             autoIncrement: true,
         },
-        userId: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-        },
         name: {
-            type: Sequelize.VARCHAR(255),
+            type: Sequelize.STRING(255),
             allowNull: false,
         },
         options: {

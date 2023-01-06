@@ -3,7 +3,7 @@ const Profile = db.profile;
 
 const FLAG_MAP = require('../../mappers/flagMappers');
 
-export default async (req, res) => {
+module.exports = async (req, res) => {
   try {
     const body = req.body;
 

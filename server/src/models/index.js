@@ -26,7 +26,7 @@ db.sequelize = sequelize;
 
 db.user = require('../models/user.js')(sequelize, Sequelize);
 db.role = require('../models/role.js')(sequelize, Sequelize);
-db.track = require('../models/profile.js')(sequelize, Sequelize);
+db.profile = require('../models/profile.js')(sequelize, Sequelize);
 db.subscription = require('../models/subscription.js')(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
@@ -41,17 +41,9 @@ db.user.belongsToMany(db.role, {
     otherKey: 'roleId'
 });
 
-db.user.hasOne(db.subscription, {
-    through: 'user_roles',
-    foreignKey: 'id',
-    otherKey: 'subscriptionId'
-});
+db.user.belongsTo(db.subscription);
 
-db.user.hasMany(db.profile, {
-    through: 'user_profiles',
-    foreignKey: 'id',
-    otherKey: 'userId'
-});
+db.profile.belongsTo(db.user);
 
 /*db.track.hasMany(db.trackHistory, {
   foreignKey: 'id',

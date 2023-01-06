@@ -5,7 +5,7 @@ const User = db.user;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-export default async (req, res) => {
+module.exports = async (req, res) => {
     try {
         const user = await User.findOne({
             where: {
