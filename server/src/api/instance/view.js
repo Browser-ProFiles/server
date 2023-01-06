@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
       form: JSON.parse(profile.form),
     });
   } catch (e) {
-    console.log('e', e)
+    console.error(e)
 
     res.status(400).send({
       status: 'error',

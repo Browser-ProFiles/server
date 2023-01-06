@@ -89,7 +89,7 @@ module.exports = async (req, res) => {
       data,
     });
   } catch (e) {
-    console.log('e', e)
+    console.error(e)
 
     res.status(400).send({
       status: 'error',
