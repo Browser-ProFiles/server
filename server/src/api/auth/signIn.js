@@ -5,6 +5,9 @@ const User = db.user;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
+// key: 6LcyqOIjAAAAAIMycBL4qOO6OHma5Zqcrf10YJLM
+// secret: 6LcyqOIjAAAAAM51fwu1GgSFunG6YWfjS6yxLOsr
+
 module.exports = async (req, res) => {
     try {
         const user = await User.findOne({
