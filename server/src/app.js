@@ -6,7 +6,7 @@ const cookieSession = require("cookie-session");
 
 require('dotenv').config();
 
-const api = require('./api');
+const routes = require('./routes');
 
 const app = express();
 
@@ -47,7 +47,7 @@ db.sequelize.sync();
 //   initial();
 // });
 
-app.use('/api/v1', api);
+app.use('/api/v1', routes);
 
 function initRoles() {
     Role.create({

@@ -1,12 +1,9 @@
 const db = require('../../models');
-const config = require('../../config/auth');
 const User = db.user;
 
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+const JwtService = require('../../services/jwt');
 
-// key: 6LcyqOIjAAAAAIMycBL4qOO6OHma5Zqcrf10YJLM
-// secret: 6LcyqOIjAAAAAM51fwu1GgSFunG6YWfjS6yxLOsr
+const bcrypt = require('bcryptjs');
 
 module.exports = async (req, res) => {
     try {
@@ -31,23 +28,18 @@ module.exports = async (req, res) => {
             });
         }
 
-        const token = jwt.sign({ id: user.id }, config.secret, {
-            expiresIn: 86400 * 7, // 1 week
-        });
-
-        let authorities = [];
         const roles = await user.getRoles();
-        for (let i = 0; i < roles.length; i++) {
-            authorities.push('ROLE_' + roles[i].name.toUpperCase());
-        }
 
-        req.session.token = token;
-
-        return res.status(200).send({
+        const token = JwtService.sign({
             id: user.id,
             username: user.username,
-            email: user.email,
-            roles: authorities,
+            roles,
+        }, {
+            expiresIn: 86400 * 7 * 31, // 1 month
+        });
+
+        return res.status(200).send({
+            token,
         });
     } catch (error) {
         return res.status(500).send({ message: error.message });

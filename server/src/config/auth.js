@@ -1,3 +1,8 @@
 module.exports = {
-    secret: 'secret-key-wvbwjvbwjkvw'
+    jwt: {
+        issuer: 'TEST',
+        audience: 'http://localhost',
+        expiresIn: '1m',
+        algorithm: 'RS256'
+    }
 };

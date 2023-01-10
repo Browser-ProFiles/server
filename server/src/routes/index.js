@@ -1,9 +1,8 @@
 const express = require('express');
-const { authJwt, verifySignUp } = require('../middlewares');
+const { authJwt, verifySignUp, subscription } = require('../middlewares');
 
 const signUp = require('./auth/signUp');
 const signIn = require('./auth/signIn');
-const signOut = require('./auth/signOut');
 
 const listInstance = require('./instance/list');
 const viewInstance = require('./instance/view');
@@ -19,14 +18,13 @@ router.post('/auth/sign-up', [
     verifySignUp.checkRolesExisted
 ], signUp);
 router.post('/auth/sign-in', signIn);
-router.post('/auth/sign-out', [authJwt.verifyToken], signOut);
 
-router.get('/instance/list', [authJwt.verifyToken], listInstance);
-router.get('/instance/view/:name', [authJwt.verifyToken], viewInstance);
+router.get('/instance/list', [authJwt.verify], listInstance);
+router.get('/instance/view/:name', [authJwt.verify], viewInstance);
 
-router.post('/instance/create', [authJwt.verifyToken, authJwt.hasEnoughSubscription], newInstance);
-router.post('/instance/launch', [authJwt.verifyToken], launchInstance);
-router.patch('/instance/edit/:name', [authJwt.verifyToken], editInstance);
-router.delete('/instance/remove/:name', [authJwt.verifyToken], removeInstance);
+router.post('/instance/create', [authJwt.verify, subscription.hasEnoughSubscription], newInstance);
+router.post('/instance/launch', [authJwt.verify], launchInstance);
+router.patch('/instance/edit/:name', [authJwt.verify], editInstance);
+router.delete('/instance/remove/:name', [authJwt.verify], removeInstance);
 
 module.exports = router;

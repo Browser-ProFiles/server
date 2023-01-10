@@ -1,82 +1,44 @@
-const jwt = require('jsonwebtoken');
-const config = require('../config/auth.js');
-const db = require('../models');
-const User = db.user;
+const JwtService = require('../services/jwt');
 
-const verifyToken = (req, res, next) => {
-    let token = req.session.token;
-
-    if (!token) {
-        return res.status(403).send({
-            message: 'No token provided!',
-        });
+class JwtMiddleware {
+    verify(req, res, next) {
+        const bearer = req.header('Authorization') || '';
+        const token = bearer.split(' ')[1];
+        const valid = JwtService.verify(token);
+        req.user = JwtService.decode(token);
+        return valid ? next() : res.status(401).send({ error: 'Unauthorized' });
     }
 
-    jwt.verify(token, config.secret, (err, decoded) => {
-        if (err || !decoded) {
-            return res.status(401).send({
-                message: 'Unauthorized!',
-            });
+    hasRole(role) {
+        return (req, res, next) => {
+            const bearer = req.header('Authorization') || '';
+            const token = bearer.split(' ')[1];
+            const decoded = JwtService.decode(token);
+            const foundRole = decoded.payload.roles.find(e => e.role === role);
+            return foundRole ? next() : res.status(403).send({ error: 'Access Denied' });
         }
-        if (!req.user) {
-            req.user = {};
-        }
-        req.user.id = decoded.id;
-        next();
-    });
-};
-
-const hasEnoughSubscription = async (req, res, next) => {
-    try {
-        const user = await User.findByPk(req.user.id);
-        const roles = await user.getRoles();
-
-        for (let i = 0; i < roles.length; i++) {
-            if (roles[i].name === 'admin') {
-                return next();
-            }
-        }
-
-        const profiles = await user.getProfiles();
-        const subscription = await user.getSubscription();
-        if (subscription.maxProfiles <= profiles.length) {
-            return res.status(403).send({
-                message: 'Too many profiles. Change the subscription',
-            });
-        }
-
-        return next();
-    } catch (error) {
-        console.log(error)
-        return res.status(500).send({
-            message: 'Unable to validate User role!',
-        });
     }
-};
 
-const isAdmin = async (req, res, next) => {
-    try {
-        const user = await User.findByPk(req.user.id);
-        const roles = await user.getRoles();
-
-        for (let i = 0; i < roles.length; i++) {
-            if (roles[i].name === 'admin') {
-                return next();
-            }
+    hasAllRoles(roles) {
+        return (req, res, next) => {
+            const bearer = req.header('Authorization') || '';
+            const token = bearer.split(' ')[1];
+            const decoded = JwtService.decode(token);
+            const foundAllRoles = roles.every(e => decoded.payload.roles.find(i => i.role === e));
+            return foundAllRoles ? next() : res.status(403).send({ error: 'Access Denied' });
         }
-
-        return res.status(403).send({
-            message: 'Require Admin Role!',
-        });
-    } catch (error) {
-        return res.status(500).send({
-            message: 'Unable to validate User role!',
-        });
     }
-};
 
-module.exports = {
-    verifyToken,
-    hasEnoughSubscription,
-    isAdmin,
-};
+    hasAnyRole(roles) {
+        return (req, res, next) => {
+            const bearer = req.header('Authorization') || '';
+            const token = bearer.split(' ')[1];
+            const decoded = JwtService.decode(token);
+            const foundAnyRole = roles.some(e => decoded.payload.roles.find(i => i.role === e));
+            return foundAnyRole ? next() : res.status(403).send({ error: 'Access Denied' });
+        }
+    }
+
+}
+
+module.exports = new JwtMiddleware();
