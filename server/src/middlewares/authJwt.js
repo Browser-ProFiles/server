@@ -5,7 +5,8 @@ class JwtMiddleware {
         const bearer = req.header('Authorization') || '';
         const token = bearer.split(' ')[1];
         const valid = JwtService.verify(token);
-        req.user = JwtService.decode(token);
+        const decodedData = JwtService.decode(token);
+        req.user = decodedData?.payload || decodedData;
         return valid ? next() : res.status(401).send({ error: 'Unauthorized' });
     }
 

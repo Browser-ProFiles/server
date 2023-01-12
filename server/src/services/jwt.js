@@ -8,8 +8,9 @@ const privateKey = fs.readFileSync(path.join(__dirname, '../config/keys/private.
 const publicKey = fs.readFileSync(path.join(__dirname, '../config/keys/public.key'), 'utf8');
 
 class JwtService {
-    sign(payload) {
-        return jwt.sign(payload, privateKey, authConfig.jwt);
+    sign(data) {
+        console.log('SIGN WITH', data?.payload || data)
+        return jwt.sign(data?.payload || data, privateKey, authConfig.jwt);
     }
 
     verify(token) {

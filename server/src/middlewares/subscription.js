@@ -3,10 +3,16 @@ const User = db.user;
 
 const hasEnoughSubscription = async (req, res, next) => {
     try {
+        console.log('req.user', req.user)
         const user = await User.findByPk(req.user.id);
+        if (!user) {
+            throw new Error('User not found.');
+        }
+
         const roles = await user.getRoles();
 
         for (let i = 0; i < roles.length; i++) {
+            console.log('roles[i].name', roles[i].name)
             if (roles[i].name === 'admin') {
                 return next();
             }
