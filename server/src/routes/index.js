@@ -9,6 +9,7 @@ const viewInstance = require('./instance/view');
 const newInstance = require('./instance/new');
 const editInstance = require('./instance/edit');
 const removeInstance = require('./instance/remove');
+const generateFingerprint = require('./instance/generateFingerprint');
 
 const router = express.Router();
 
@@ -24,5 +25,7 @@ router.get('/instance/view/:name', [authJwt.verify], viewInstance);
 router.post('/instance/create', [authJwt.verify, subscription.hasEnoughSubscription], newInstance);
 router.patch('/instance/edit/:name', [authJwt.verify], editInstance);
 router.delete('/instance/remove/:name', [authJwt.verify], removeInstance);
+
+router.post('/generate/fingerprint', [authJwt.verify], generateFingerprint);
 
 module.exports = router;
