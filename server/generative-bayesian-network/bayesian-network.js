@@ -23,7 +23,6 @@ class BayesianNetwork {
         });
         //const zip = new AdmZip(path);
         //const zipEntries = zip.getEntries();
-      console.log('networkDefinition', networkDefinition)
         this.nodesInSamplingOrder = networkDefinition.nodes.map((nodeDefinition) => new bayesian_node_1.BayesianNode(nodeDefinition));
         this.nodesByName = this.nodesInSamplingOrder.reduce((p, node) => ({
             ...p,

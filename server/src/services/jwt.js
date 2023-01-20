@@ -9,7 +9,6 @@ const publicKey = fs.readFileSync(path.join(__dirname, '../config/keys/public.ke
 
 class JwtService {
     sign(data) {
-        console.log('SIGN WITH', data?.payload || data)
         return jwt.sign(data?.payload || data, privateKey, authConfig.jwt);
     }
 

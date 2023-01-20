@@ -6,7 +6,6 @@ module.exports = async (req, res) => {
         const os = req.body.fingerprintOs || 'windows'
         const browserName = 'chrome';
         const browserVersion = 108;
-        console.log('os', os)
 
         const fingerprintGenerator = new FingerprintGenerator();
         const browserFingerprintWithHeaders = fingerprintGenerator.getFingerprint({
