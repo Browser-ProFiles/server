@@ -20,8 +20,8 @@ module.exports = async (req, res) => {
             ],
         });
 
-        delete browserFingerprintWithHeaders.fingerprint.screen;
-        delete browserFingerprintWithHeaders.headers['accept-language'];
+        // delete browserFingerprintWithHeaders.fingerprint.screen;
+        // delete browserFingerprintWithHeaders.headers['accept-language'];
 
         res.json({
             status: 'success',
