@@ -6,6 +6,38 @@ module.exports = async (req, res) => {
     try {
         const ip = req.headers['X-FORWARDED-FOR'] || req.connection.remoteAddress;
 
+        const username = req.body?.username || '';
+        const email = req.body?.email || '';
+        const password = req.body?.password || '';
+
+        if (!username) {
+            throw new Error('Username required.');
+        }
+
+        if (username.length < 4 || username.length > 255) {
+            throw new Error('Incorrect username length (should be between 4 and 255).');
+        }
+
+        if (!email) {
+            throw new Error('E-mail required.');
+        }
+
+        if (email.length > 128) {
+            throw new Error('Too long email.');
+        }
+
+        if (!/@gmail\.com$/.test(req.body.email)) {
+            throw new Error('Only gmail emails can be used.');
+        }
+
+        if (!password) {
+            throw new Error('Password required.');
+        }
+
+        if (password.length < 4 || password.length > 255) {
+            throw new Error('Incorrect password length (should be between 4 and 255).');
+        }
+
         const user = await User.create({
             username: req.body.username,
             email: req.body.email,
@@ -20,6 +52,6 @@ module.exports = async (req, res) => {
 
         res.send({ message: 'User registered successfully!' });
     } catch (error) {
-        res.status(500).send({ message: error.message });
+        res.status(400).send({ message: error.message });
     }
 };
