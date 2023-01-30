@@ -5,12 +5,14 @@ module.exports = async (req, res) => {
         const device = req.body.fingerprintDevice || 'desktop';
         const os = req.body.fingerprintOs || 'windows'
         const browserName = 'chrome';
-        const browserVersion = 108;
+        console.log('req.body.fingerprintBrowserVersion', req.body.fingerprintBrowserVersion)
+        const browserVersion = req.body.fingerprintBrowserVersion || 108;
 
         const fingerprintGenerator = new FingerprintGenerator();
         const browserFingerprintWithHeaders = fingerprintGenerator.getFingerprint({
             devices: [device],
             operatingSystems: [os],
+            httpVersion: '1',
             browsers: [
                 {
                     name: browserName,

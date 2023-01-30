@@ -4,6 +4,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING(255),
             allowNull: false
         },
+
         email: {
             type: Sequelize.STRING(255),
             allowNull: false
@@ -23,6 +24,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING(64),
             allowNull: true
         },
+
         details: {
             type: Sequelize.STRING(512),
             allowNull: true

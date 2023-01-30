@@ -240,7 +240,9 @@ class HeaderGenerator {
             acc[key] = value.filter((x) => (http1Values?.[key]?.includes(x) || http2Values?.[key]?.includes(x)) ?? true);
             return acc;
         }, {}));
+
         if (Object.keys(inputSample).length === 0) {
+            // TODO: Fix?
             // Try to convert HTTP/2 headers to HTTP/1 headers
             if (headerOptions.httpVersion === '1') {
                 const headers2 = this.getHeaders({
