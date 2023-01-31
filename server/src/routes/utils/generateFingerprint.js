@@ -5,7 +5,6 @@ module.exports = async (req, res) => {
         const device = req.body.fingerprintDevice || 'desktop';
         const os = req.body.fingerprintOs || 'windows'
         const browserName = 'chrome';
-        console.log('req.body.fingerprintBrowserVersion', req.body.fingerprintBrowserVersion)
         const browserVersion = req.body.fingerprintBrowserVersion || 108;
 
         const fingerprintGenerator = new FingerprintGenerator();
@@ -23,7 +22,11 @@ module.exports = async (req, res) => {
         });
 
         // delete browserFingerprintWithHeaders.fingerprint.screen;
-        // delete browserFingerprintWithHeaders.headers['accept-language'];
+        delete browserFingerprintWithHeaders.headers['Accept-Language'];
+        if (browserFingerprintWithHeaders.fingerprint.navigator) {
+            delete browserFingerprintWithHeaders.fingerprint.navigator.language;
+            delete browserFingerprintWithHeaders.fingerprint.navigator.languages;
+        }
 
         res.json({
             status: 'success',
