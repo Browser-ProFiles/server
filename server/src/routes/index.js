@@ -13,6 +13,7 @@ const removeInstance = require('./instance/remove');
 
 const generateFingerprint = require('./utils/generateFingerprint');
 const browserRevisions = require('./utils/browserRevisions');
+const subscriptionsList = require('./utils/subscriptions');
 
 const router = express.Router();
 
@@ -32,5 +33,6 @@ router.delete('/instance/remove/:name', [authJwt.verify], removeInstance);
 
 router.post('/generate/fingerprint', [authJwt.verify], generateFingerprint);
 router.get('/browser/versions', [authJwt.verify], browserRevisions);
+router.get('/subscriptions/list', [], subscriptionsList);
 
 module.exports = router;
