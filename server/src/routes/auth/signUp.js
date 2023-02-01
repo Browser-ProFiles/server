@@ -38,11 +38,17 @@ module.exports = async (req, res) => {
             throw new Error('Incorrect password length (should be between 4 and 255).');
         }
 
+        // FREE TRIAL 1 month
+        const subscriptionActiveUntil = new Date();
+        subscriptionActiveUntil.setMonth(subscriptionActiveUntil.getMonth() + 1);
+        const activeTimeSeconds = Math.round(subscriptionActiveUntil.getTime() / 1000);
+
         const user = await User.create({
             username: req.body.username,
             email: req.body.email,
             password: bcrypt.hashSync(req.body.password, 8),
             subscriptionId: 1,
+            subscriptionActiveUntil: String(activeTimeSeconds),
             ip,
         });
 

@@ -4,6 +4,10 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             primaryKey: true,
         },
+        name: {
+            type: Sequelize.STRING(32),
+            allowNull: false,
+        },
         maxProfiles: {
             type: Sequelize.INTEGER,
             allowNull: false,

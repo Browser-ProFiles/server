@@ -16,7 +16,7 @@ module.exports = (sequelize, Sequelize) => {
         },
 
         subscriptionActiveUntil: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING(32),
             allowNull: true
         },
 

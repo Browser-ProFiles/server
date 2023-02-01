@@ -64,25 +64,29 @@ function initRoles() {
 function initSubscriptions() {
     Subscription.create({
         id: 1,
+        name: 'Free',
         maxProfiles: 2,
         price: 0,
     });
 
     Subscription.create({
         id: 2,
-        maxProfiles: 5,
+        name: 'Basic',
+        maxProfiles: 10,
         price: 10,
     });
 
     Subscription.create({
         id: 3,
-        maxProfiles: 20,
+        name: 'Pro',
+        maxProfiles: 50,
         price: 30,
     });
 
     Subscription.create({
         id: 4,
-        maxProfiles: 100,
+        name: 'Max',
+        maxProfiles: 200,
         price: 100,
     });
 }

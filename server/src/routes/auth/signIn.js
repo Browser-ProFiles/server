@@ -33,6 +33,7 @@ module.exports = async (req, res) => {
         const token = JwtService.sign({
             id: user.id,
             username: user.username,
+            email: user.email,
             roles,
         }, {
             expiresIn: 86400 * 7 * 31, // 1 month

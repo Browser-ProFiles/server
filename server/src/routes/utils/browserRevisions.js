@@ -5,7 +5,6 @@ const { hashRijndael, generateUserHash } = require('../../helpers/userHash');
 const BROWSER_VERSIONS = require('../../const/browserVersions');
 
 module.exports = async (req, res) => {
-    console.log('req', req)
     try {
         const user = await User.findOne({
             attributes: ['id', 'username', 'email', 'ip'],
