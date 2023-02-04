@@ -3,6 +3,7 @@ const { authJwt, verifySignUp, subscription } = require('../middlewares');
 
 const signUp = require('./auth/signUp');
 const signIn = require('./auth/signIn');
+const confirmSignUp = require('./auth/confirmSignUp');
 const currentUser = require('./auth/getUser');
 
 const listInstance = require('./instance/list');
@@ -22,6 +23,7 @@ router.post('/auth/sign-up', [
     verifySignUp.checkRolesExisted
 ], signUp);
 router.post('/auth/sign-in', signIn);
+router.post('/auth/confirm/sign-up', confirmSignUp);
 router.get('/user/current', [authJwt.verify], currentUser);
 
 router.get('/instance/list', [authJwt.verify], listInstance);

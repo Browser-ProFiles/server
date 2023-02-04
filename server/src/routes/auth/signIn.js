@@ -1,9 +1,11 @@
-const db = require('../../models');
-const User = db.user;
+const bcrypt = require('bcryptjs');
 
 const JwtService = require('../../services/jwt');
 
-const bcrypt = require('bcryptjs');
+const { STATUS_ACTIVE } = require('../../const/userStatus');
+
+const db = require('../../models');
+const User = db.user;
 
 module.exports = async (req, res) => {
     try {
@@ -25,6 +27,12 @@ module.exports = async (req, res) => {
         if (!passwordIsValid) {
             return res.status(401).send({
                 message: 'Invalid Password!',
+            });
+        }
+
+        if (user.status !== STATUS_ACTIVE) {
+            return res.status(401).send({
+                message: 'Account email not confirmed.',
             });
         }
 

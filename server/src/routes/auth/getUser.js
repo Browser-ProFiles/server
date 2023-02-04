@@ -34,7 +34,6 @@ module.exports = async (req, res) => {
         id: user.subscriptionId,
       },
     });
-    console.log('subscription', subscription)
 
     if (!subscription) {
       throw new Error('Subscription fetch error.');

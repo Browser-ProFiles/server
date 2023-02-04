@@ -3,7 +3,6 @@ const Profile = db.profile;
 
 module.exports = async (req, res) => {
   try {
-    console.log('req.params.name', req.params.name)
     const profile = await Profile.findOne({
       where: {
         userId: req.user.id,

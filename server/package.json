@@ -30,6 +30,7 @@
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
     "mysql2": "^2.3.3",
+    "nodemailer": "^6.9.1",
     "oauth2-server": "^3.1.1",
     "puppeteer": "^19.4.1",
     "puppeteer-extra": "^3.3.4",

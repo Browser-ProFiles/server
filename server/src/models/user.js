@@ -11,8 +11,18 @@ module.exports = (sequelize, Sequelize) => {
         },
 
         password: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(255),
             allowNull: false
+        },
+
+        status: {
+            type: Sequelize.STRING(16),
+            allowNull: false
+        },
+
+        confirmToken: {
+            type: Sequelize.STRING(255),
+            allowNull: true
         },
 
         subscriptionActiveUntil: {
