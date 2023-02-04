@@ -20,6 +20,7 @@ const hasEnoughSubscription = async (req, res, next) => {
         const subscription = await user.getSubscription();
         if (subscription.maxProfiles <= profiles.length) {
             return res.status(403).send({
+                status: 'error',
                 message: 'Too many profiles. Change the subscription',
             });
         }
