@@ -33,14 +33,14 @@ module.exports = async (req, res) => {
       if (FLAG_MAP[key]) {
         const flag = FLAG_MAP[key];
 
-        if (!value) return;
+        if (!flag) return;
 
-        if (typeof flag == 'boolean') {
-          FLAGS.push(`--${key}`);
+        if (typeof value === 'boolean' && value) {
+          FLAGS.push(flag);
           return;
         }
 
-        FLAGS.push(`--${key}=${value}`);
+        value && FLAGS.push(`${flag}=${value}`);
       }
     });
 
