@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
         });
 
         if (!user) {
-            throw new Error('Invalid token.');
+            throw new Error(req.appLang === 'en' ? 'Invalid token' : 'Неверный токен');
         }
 
         await user.update({

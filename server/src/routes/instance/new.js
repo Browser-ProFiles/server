@@ -68,7 +68,9 @@ module.exports = async (req, res) => {
     if (hasWithSameName) {
       res.status(400).send({
         status: 'error',
-        message: 'Profile with same name already exists.',
+        message: req.appLang === 'en' ?
+            'Profile with same name already exists.' :
+            'Профиль с данным именем уже существует.',
       });
     }
 

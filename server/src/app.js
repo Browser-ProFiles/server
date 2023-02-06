@@ -1,10 +1,14 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
-const cookieSession = require("cookie-session");
+const cookieSession = require('cookie-session');
+const { lang } = require('./middlewares');
 
-require('dotenv').config();
+require('dotenv').config({
+    path: path.join(__dirname, '../.env')
+});
 
 const routes = require('./routes');
 
@@ -34,6 +38,9 @@ app.use(
         // sameSite: 'strict'
     })
 );
+
+// i18n
+app.use(lang);
 
 // database
 const db = require('./models');

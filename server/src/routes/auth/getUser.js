@@ -21,11 +21,11 @@ module.exports = async (req, res) => {
     });
 
     if (!user) {
-      throw new Error('User fetch error.');
+      throw new Error(req.appLang === 'en' ? 'User fetch error.' : 'Пользователь не найден');
     }
 
     if (!user.subscriptionId) {
-      throw new Error('Invalid user subscription.');
+      throw new Error(req.appLang === 'en' ? 'Invalid user subscription.' : 'Некорректная подиска');
     }
 
     const subscription = await Subscription.findOne({
@@ -36,7 +36,7 @@ module.exports = async (req, res) => {
     });
 
     if (!subscription) {
-      throw new Error('Subscription fetch error.');
+      throw new Error(req.appLang === 'en' ? 'Subscription fetch error.' : 'Не найдена подписка.');
     }
 
     res.json({

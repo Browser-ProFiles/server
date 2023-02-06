@@ -68,7 +68,7 @@ module.exports = async (req, res) => {
     if (!profile) {
       res.status(404).send({
         status: 'error',
-        message: 'Profile not found',
+        message: req.appLang === 'en' ? 'Profile not found' : 'Профиль не найден',
       });
     }
 

@@ -19,31 +19,39 @@ module.exports = async (req, res) => {
         const password = req.body?.password || '';
 
         if (!username) {
-            throw new Error('Username required.');
+            throw new Error(req.appLang === 'en' ? 'Username required.' : 'Логин обязателен.');
         }
 
         if (username.length < 4 || username.length > 255) {
-            throw new Error('Incorrect username length (should be between 4 and 255).');
+            throw new Error(
+                req.appLang === 'en' ?
+                    'Incorrect username length (should be between 4 and 255).' :
+                    'Некорректная длина логина (должна быть между 4 и 255).'
+            );
         }
 
         if (!email) {
-            throw new Error('E-mail required.');
+            throw new Error(req.appLang === 'en' ? 'E-mail required.' : 'E-mail обязателен');
         }
 
         if (email.length > 128) {
-            throw new Error('Too long email.');
+            throw new Error(req.appLang === 'en' ? 'Too long email.' : 'Слишком длинный E-mail');
         }
 
         if (!/@gmail\.com$/.test(req.body.email)) {
-            throw new Error('Only gmail emails can be used.');
+            throw new Error(req.appLang === 'en' ? 'Only gmail emails can be used.' : 'Почта не gmail');
         }
 
         if (!password) {
-            throw new Error('Password required.');
+            throw new Error(req.appLang === 'en' ? 'Password required.' : 'Пароль обязателен.');
         }
 
         if (password.length < 4 || password.length > 255) {
-            throw new Error('Incorrect password length (should be between 4 and 255).');
+            throw new Error(
+                req.appLang === 'en' ?
+                    'Incorrect password length (should be between 4 and 255).' :
+                    'Неверная длина пароля (должна быть между 4 и 255)'
+            );
         }
 
         // Password
@@ -77,7 +85,7 @@ module.exports = async (req, res) => {
 
         await sendConfirmMail(req.body.email, token);
 
-        res.send({ message: 'User registered successfully!' });
+        res.send({ message: req.appLang === 'en' ? 'User registered successfully' : 'Пользователь успешно зарегистрирован' });
     } catch (error) {
         res.status(400).send({ message: error.message });
     }

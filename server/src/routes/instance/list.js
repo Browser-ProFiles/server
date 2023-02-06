@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
     });
 
     if (!user) {
-      throw new Error('User not found.')
+      throw new Error(req.appLang === 'en' ? 'User not found.' : 'Пользователь не найден')
     }
 
     const subscription = await Subscription.findOne({
@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
     });
 
     if (!subscription) {
-      throw new Error('Subscription not found.')
+      throw new Error(req.appLang === 'en' ? 'Subscription not found.' : 'Подписка не найдена.')
     }
 
     const profiles = await Profile.findAll({
