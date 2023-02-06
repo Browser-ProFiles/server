@@ -19,7 +19,7 @@ app.use(helmet());
 
 app.use(cors({
     credentials: true,
-    origin: process.env.FRONTEND_URL
+    origin: [process.env.FRONTEND_URL, process.env.LANDING_URL]
 }));
 app.options('*', cors());
 
