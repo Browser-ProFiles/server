@@ -1,6 +1,6 @@
 const app = require('./app');
 
-const port = process.env.PORT || 5003;
+const port = process.env.PORT || 3005;
 app.listen(port, () => {
   /* eslint-disable no-console */
   console.log(`Listening: http://localhost:${port}`);
