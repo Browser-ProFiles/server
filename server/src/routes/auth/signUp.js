@@ -12,7 +12,7 @@ const md5 = (data) => crypto.createHash('md5').update(data).digest('hex');
 
 module.exports = async (req, res) => {
     try {
-        const ip = req.headers['X-FORWARDED-FOR'] || req.connection.remoteAddress;
+        // const ip = req.headers['X-FORWARDED-FOR'] || req.connection.remoteAddress;
 
         const username = req.body?.username || '';
         const email = req.body?.email || '';
@@ -76,7 +76,7 @@ module.exports = async (req, res) => {
             status: STATUS_DRAFT,
             confirmToken: token,
 
-            ip,
+            ip: '',
         });
 
         // user has role = 1
