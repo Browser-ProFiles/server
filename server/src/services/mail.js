@@ -36,7 +36,7 @@ const sendConfirmMail = async (to, token) => {
     const confirmUrl = `${process.env.FRONTEND_URL}/auth/confirm/${token}`;
 
     const info = await transporter.sendMail({
-        from: '"Browser ProFiles"',
+        from: login,
         to: to,
         subject: "Email Confirmation",
         html: `
