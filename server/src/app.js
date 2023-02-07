@@ -19,8 +19,18 @@ app.use(morgan('dev'));
 
 app.use(cors({
     credentials: true,
-    origin: [process.env.FRONTEND_URL, process.env.LANDING_URL],
     optionsSuccessStatus: 200,
+    origin: function (origin, callback) {
+        console.log('origin', origin)
+        switch (origin) {
+            case process.env.FRONTEND_URL:
+            case process.env.LANDING_URL:
+                callback(null, true); // allow these domains
+                break;
+            default:
+                callback(new Error('Now allowed')); // block others
+        }
+    },
 }));
 app.options('*', cors());
 
