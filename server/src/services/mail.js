@@ -13,9 +13,10 @@ const sendConfirmMail = async (to, token) => {
     }
 
     const transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
+        service: "Yandex",
+        /*host: process.env.EMAIL_HOST,
         port: Number(process.env.EMAIL_PORT),
-        secure: process.env.EMAIL_SECURE === 'true', // true for 465, false for other ports
+        secure: process.env.EMAIL_SECURE === 'true', // true for 465, false for other ports*/
         auth: {
             user: login,
             pass: password,
