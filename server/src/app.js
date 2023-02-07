@@ -17,11 +17,6 @@ const app = express();
 app.use(morgan('dev'));
 app.use(helmet());
 
-app.use(cors({
-    credentials: true,
-    origin: [process.env.FRONTEND_URL, process.env.LANDING_URL]
-}));
-app.options('*', cors());
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', `${process.env.FRONTEND_URL},${process.env.LANDING_URL}`);
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
