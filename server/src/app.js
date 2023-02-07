@@ -19,14 +19,7 @@ app.use(morgan('dev'));
 
 app.use(cors({
     credentials: true,
-    origin: function(origin, callback) {
-        console.log('origin', origin)
-        if ([process.env.FRONTEND_URL, process.env.LANDING_URL].indexOf(origin) !== -1) {
-            callback(null, true)
-        } else {
-            callback(new Error('Not allowed by CORS'))
-        }
-    }
+    origin: [process.env.FRONTEND_URL, process.env.LANDING_URL]
 }));
 app.options('*', cors());
 
