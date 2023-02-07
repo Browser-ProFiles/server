@@ -83,7 +83,11 @@ module.exports = async (req, res) => {
         await user.setRoles([1]);
         await user.setSubscription([1]);
 
-        await sendConfirmMail(req.body.email, token);
+        try {
+            await sendConfirmMail(req.body.email, token);
+        } catch (e) {
+            console.error('send email error', e)
+        }
 
         res.send({ message: req.appLang === 'en' ? 'User registered successfully' : 'Пользователь успешно зарегистрирован' });
     } catch (error) {
