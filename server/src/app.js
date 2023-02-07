@@ -14,28 +14,14 @@ const routes = require('./routes');
 
 const app = express();
 
-app.use(function (req, res, next) {
-    const origins = [
-        process.env.FRONTEND_URL,
-        process.env.LANDING_URL,
-    ];
-
-    for (let i = 0; i < origins.length; i++){
-        let origin = origins[i];
-
-        if (req.headers.origin && req.headers.origin.indexOf(origin) > -1) {
-            res.header('Access-Control-Allow-Origin', req.headers.origin);
-        }
-    }
-
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
-
 app.use(morgan('dev'));
-// app.use(helmet());
+app.use(helmet());
+
+app.use(cors({
+    credentials: true,
+    origin: [process.env.FRONTEND_URL, process.env.LANDING_URL]
+}));
+app.options('*', cors());
 
 // parse requests of content-type - application/json
 app.use(express.json());
