@@ -20,6 +20,7 @@ app.use(function (req, res, next) {
         process.env.LANDING_URL,
     ];
 
+    console.log('req.headers.origin', req.headers.origin)
     console.log('origins', origins)
     for (let i = 0; i < origins.length; i++){
         let origin = origins[i];
