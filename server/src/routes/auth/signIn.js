@@ -16,7 +16,9 @@ module.exports = async (req, res) => {
         });
 
         if (!user) {
-            return res.status(404).send({ message: 'User Not found.' });
+            return res.status(404).send({
+                message: req.appLang === 'en' ? 'User not found' : 'Пользователь не найден'
+            });
         }
 
         const passwordIsValid = bcrypt.compareSync(
