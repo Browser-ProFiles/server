@@ -17,19 +17,17 @@ const app = express();
 app.use(morgan('dev'));
 app.use(helmet());
 
-app.use(function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', `${process.env.FRONTEND_URL},${process.env.LANDING_URL}`);
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header(
-        'Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, X-Api-Key'
-    );
-    res.header('Access-Control-Allow-Credentials', 'true');
-    if ('OPTIONS' === req.method) {
-        res.sendStatus(200);
-    } else {
-        next();
+app.use(cors({
+    credentials: true,
+    origin: function(origin, callback) {
+        if ([process.env.FRONTEND_URL, process.env.LANDING_URL].indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
     }
-});
+}));
+app.options('*', cors());
 
 // parse requests of content-type - application/json
 app.use(express.json());
