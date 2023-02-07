@@ -63,7 +63,7 @@ module.exports = async (req, res) => {
         const activeTimeSeconds = Math.round(subscriptionActiveUntil.getTime() / 1000);
 
         // Confirm token
-        const token = md5(`${req.body.username}_${ip}_${req.body.email}_${password}`).substring(0, 32);
+        const token = md5(`${req.body.username}_${''}_${req.body.email}_${password}`).substring(0, 32);
 
         const user = await User.create({
             username: req.body.username,
