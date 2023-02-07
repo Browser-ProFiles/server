@@ -14,25 +14,28 @@ const routes = require('./routes');
 
 const app = express();
 
+app.use(function (req, res, next) {
+    const origins = [
+        process.env.FRONTEND_URL,
+        process.env.LANDING_URL,
+    ];
+
+    console.log('origins', origins)
+    for (let i = 0; i < origins.length; i++){
+        let origin = origins[i];
+
+        if (req.headers.origin.indexOf(origin) > -1) {
+            res.header('Access-Control-Allow-Origin', req.headers.origin);
+        }
+    }
+
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 app.use(morgan('dev'));
 // app.use(helmet());
-
-app.use(cors({
-    credentials: true,
-    optionsSuccessStatus: 200,
-    origin: function (origin, callback) {
-        console.log('origin', origin)
-        switch (origin) {
-            case process.env.FRONTEND_URL:
-            case process.env.LANDING_URL:
-                callback(null, true); // allow these domains
-                break;
-            default:
-                callback(new Error('Now allowed')); // block others
-        }
-    },
-}));
-app.options('*', cors());
 
 // parse requests of content-type - application/json
 app.use(express.json());
