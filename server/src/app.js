@@ -20,6 +20,7 @@ app.use(helmet());
 app.use(cors({
     credentials: true,
     origin: function(origin, callback) {
+        console.log('origin', origin)
         if ([process.env.FRONTEND_URL, process.env.LANDING_URL].indexOf(origin) !== -1) {
             callback(null, true)
         } else {
