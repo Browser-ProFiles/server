@@ -15,7 +15,7 @@ const routes = require('./routes');
 const app = express();
 
 app.use(morgan('dev'));
-app.use(helmet());
+// app.use(helmet());
 
 app.use(cors({
     credentials: true,
