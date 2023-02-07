@@ -20,8 +20,6 @@ app.use(function (req, res, next) {
         process.env.LANDING_URL,
     ];
 
-    console.log('req.headers.origin', req.headers.origin)
-    console.log('origins', origins)
     for (let i = 0; i < origins.length; i++){
         let origin = origins[i];
 
@@ -30,6 +28,7 @@ app.use(function (req, res, next) {
         }
     }
 
+    res.header("Access-Control-Allow-Credentials", "true");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
