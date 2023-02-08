@@ -12,7 +12,7 @@ const md5 = (data) => crypto.createHash('md5').update(data).digest('hex');
 
 module.exports = async (req, res) => {
     try {
-        // const ip = req.headers['X-FORWARDED-FOR'] || req.connection.remoteAddress;
+        const ip = req.headers['X-FORWARDED-FOR'] || req.connection.remoteAddress;
 
         const username = req.body?.username || '';
         const email = req.body?.email || '';
@@ -63,7 +63,7 @@ module.exports = async (req, res) => {
         const activeTimeSeconds = Math.round(subscriptionActiveUntil.getTime() / 1000);
 
         // Confirm token
-        const token = md5(`${req.body.username}_${''}_${req.body.email}_${password}`).substring(0, 32);
+        const token = md5(`${req.body.username}_${ip}_${req.body.email}_${password}`).substring(0, 32);
 
         const user = await User.create({
             username: req.body.username,
@@ -76,7 +76,7 @@ module.exports = async (req, res) => {
             status: STATUS_DRAFT,
             confirmToken: token,
 
-            ip: '',
+            ip,
         });
 
         // user has role = 1
@@ -84,7 +84,7 @@ module.exports = async (req, res) => {
         await user.setSubscription([1]);
 
         try {
-            await sendConfirmMail(req.body.email, token);
+            await sendConfirmMail(req.body.email, token, req.appLang);
         } catch (e) {
             console.error('send email error', e)
         }
