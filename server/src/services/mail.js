@@ -28,10 +28,10 @@ const sendConfirmMail = async (to, token, lang) => {
     const info = await transporter.sendMail({
         from: login,
         to: to,
-        subject: lang === 'en' ? 'Email Confirmation' : 'Подтверждение регистрации browser profiles',
+        subject: lang === 'en' ? 'Email Confirmation' : 'Подтверждение регистрации',
         html: `
             <p style="margin: 0 0 10px 0">
-            ${lang === 'en' ? 'Thank you for the registration in ' : 'Спасибо за регистрацию в '}
+            ${lang === 'en' ? 'Thank you for the registration in ' : 'Спасибо за регистрацию на сайте '}
             <a target="_blank" href="https://browser-profiles.com">browser-profiles.com</a>
             </p>
             <p style="margin: 0 0 10px 0">
@@ -53,6 +53,8 @@ const sendConfirmMail = async (to, token, lang) => {
                     'If you don\'t sign on this website, simply ignore this message.' :
                     'Если это были не вы, просто проигнорируйте данное письмо. '
             }</p>
+            
+            <p>© ${(new Date()).getFullYear()} Browser ProFiles</p>
         `
     });
 }
