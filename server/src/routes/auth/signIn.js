@@ -28,13 +28,13 @@ module.exports = async (req, res) => {
 
         if (!passwordIsValid) {
             return res.status(401).send({
-                message: 'Invalid Password!',
+                message: req.appLang === 'en' ? 'User not found' : 'Пользователь не найден',
             });
         }
 
         if (user.status !== STATUS_ACTIVE) {
             return res.status(401).send({
-                message: 'Account email not confirmed.',
+                message: req.appLang === 'en' ? 'Account email not confirmed.' : 'Аккаунт не подтвержден. Проверьте свою почту.',
             });
         }
 

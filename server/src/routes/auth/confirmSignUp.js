@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
 
         res.send({
             status: 'success',
-            message: 'Email confirmed successfully!',
+            message: req.appLang === 'en' ? 'Account confirmed successfully' : 'Аккаунт успешно подтвержден',
         });
     } catch (error) {
         res.status(400).send({ message: error.message });

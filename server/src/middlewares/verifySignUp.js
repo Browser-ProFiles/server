@@ -13,7 +13,9 @@ const checkDuplicateUsernameOrEmail = async (req, res, next) => {
 
         if (user) {
             return res.status(400).send({
-                message: "Failed! Username is already in use!"
+                message: req.appLang === 'en' ?
+                    'Account with this username is already in use' :
+                    'Аккаунт с данным логином уже существует'
             });
         }
 
@@ -26,7 +28,9 @@ const checkDuplicateUsernameOrEmail = async (req, res, next) => {
 
         if (user) {
             return res.status(400).send({
-                message: "Failed! Email is already in use!"
+                message: req.appLang === 'en' ?
+                    'Account with this E-mail is already in use' :
+                    'Аккаунт с данным E-mail уже существует'
             });
         }
 
