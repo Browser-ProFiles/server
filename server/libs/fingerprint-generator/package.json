@@ -34,7 +34,7 @@
     },
     "dependencies": {
         "generative-bayesian-network": "^2.1.7",
-        "header-generator": "file:../libs/header-generator",
+        "header-generator": "file:../header-generator",
         "tslib": "^2.4.0"
     },
     "gitHead": "666759805d4f18d6d307a264280bb1895ef5439e"
