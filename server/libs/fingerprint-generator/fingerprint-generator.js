@@ -31,6 +31,7 @@ class FingerprintGenerator extends header_generator_1.HeaderGenerator {
         };
         this.fingerprintGeneratorNetwork = new generative_bayesian_network_1.BayesianNetwork(network);
     }
+
     /**
      * Generates a fingerprint and a matching set of ordered headers using a combination of the default options specified in the constructor
      * and their possible overrides provided here.
@@ -94,6 +95,7 @@ class FingerprintGenerator extends header_generator_1.HeaderGenerator {
             };
         }
     }
+
     /**
      * Transforms fingerprint to the final scheme, more suitable for fingerprint manipulation and injection.
      * This schema is used in the `fingerprint-injector`.
@@ -110,8 +112,9 @@ class FingerprintGenerator extends header_generator_1.HeaderGenerator {
             language: languages[0],
             languages,
             platform,
-            deviceMemory: Number.isNaN(parsedMemory) ? null : parsedMemory,
-            hardwareConcurrency: parseInt(hardwareConcurrency, 10),
+            // TODO: Fix, make it work with workers
+            // deviceMemory: Number.isNaN(parsedMemory) ? null : parsedMemory,
+            // hardwareConcurrency: parseInt(hardwareConcurrency, 10),
             maxTouchPoints: Number.isNaN(parsedTouchPoints) ? 0 : parsedTouchPoints,
             product,
             productSub,
@@ -125,6 +128,7 @@ class FingerprintGenerator extends header_generator_1.HeaderGenerator {
             extraProperties,
             webdriver,
         };
+
         return {
             screen,
             navigator,
