@@ -63,7 +63,6 @@ module.exports = async (req, res) => {
             currency: 'USD',
             email: user.email,
             ip: '46.191.138.6',
-            i: 6,
             nonce: new Date().getTime(),
             paymentId: payment.id,
             shopId: Number(shopId),
