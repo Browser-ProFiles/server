@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
         console.log('sign', sign)
         console.log('req.body', req.body)
 
-        const secret = process.env.FREEKASSA_API_KEY;
+        const secret = process.env.FREEKASSA_SECRET_KEY2;
         if (!secret) {
             throw new Error('Incorrect secret');
         }
