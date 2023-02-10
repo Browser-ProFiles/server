@@ -1,5 +1,7 @@
 const crypto = require('crypto');
 
+const { PAYMENT_STATUS_SUCCESS } = require('../../../const/payment');
+
 const db = require('../../../models');
 const Payment = db.payment;
 const User = db.user;
@@ -65,6 +67,10 @@ module.exports = async (req, res) => {
         if (Number(payment.price) !== Number(amount)) {
             throw new Error('Incorrect amount');
         }
+
+        await payment.update({
+            status: PAYMENT_STATUS_SUCCESS
+        });
 
         const user = await User.findOne({
             attributes: ['id', 'username', 'subscriptionId', 'subscriptionActiveUntil'],
