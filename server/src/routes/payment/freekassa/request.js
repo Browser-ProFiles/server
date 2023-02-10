@@ -57,7 +57,7 @@ module.exports = async (req, res) => {
 
         // Number(`${(new Date().getTime() / 1000).toFixed()}${user.id}`)
 
-        const signature = service.getSignature(shopId, price, apiKey, 'USD')
+        const signature = service.getSignature(shopId, price, apiKey, 'USD', payment.id)
 
         const link = `https://pay.freekassa.ru/?m=${shopId}&oa=${price}&i=&currency=USD&o=${payment.id}&s=${signature}&em=${user.email}`;
 
