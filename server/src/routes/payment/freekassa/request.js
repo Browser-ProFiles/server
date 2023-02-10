@@ -57,13 +57,14 @@ module.exports = async (req, res) => {
             status: PAYMENT_STATUS_CREATED,
         });
 
+        // Number(`${(new Date().getTime() / 1000).toFixed()}${user.id}`)
         const form = {
             amount: price,
             currency: 'USD',
             email: user.email,
             ip: '46.191.138.6',
             i: 6,
-            nonce: Number(`${(new Date().getTime() / 1000).toFixed()}${user.id}`),
+            nonce: new Date().getTime(),
             paymentId: payment.id,
             shopId: Number(shopId),
         };
