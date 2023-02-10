@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const CryptoJS = require('crypto-js');
 
 class FreekassaService {
