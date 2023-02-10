@@ -19,6 +19,7 @@ class FreekassaService {
 
     getSignature(shopId, amount, secret, currency, paymentId) {
         const str = `${shopId}:${amount}:${secret}:${currency}:${paymentId}`;
+        console.log('str', str)
         return crypto.createHash('md5').update(str).digest('hex');
     }
 }
