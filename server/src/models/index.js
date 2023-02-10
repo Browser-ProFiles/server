@@ -28,6 +28,7 @@ db.user = require('../models/user.js')(sequelize, Sequelize);
 db.role = require('../models/role.js')(sequelize, Sequelize);
 db.profile = require('../models/profile.js')(sequelize, Sequelize);
 db.subscription = require('../models/subscription.js')(sequelize, Sequelize);
+db.payment = require('../models/payment.js')(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
     through: 'user_roles',
