@@ -15,8 +15,9 @@ module.exports = async (req, res) => {
 
         const apiKey = process.env.FREEKASSA_API_KEY;
         const shopId = process.env.FREEKASSA_SHOP_ID;
+        const secretKey1 = process.env.FREEKASSA_SECRET_KEY1;
 
-        if (!apiKey || !shopId) {
+        if (!apiKey || !shopId || !secretKey1) {
             throw new Error(req.appLang === 'en' ? 'Incorrect settings' : 'Некорректные настройки');
         }
 
@@ -57,7 +58,7 @@ module.exports = async (req, res) => {
 
         // Number(`${(new Date().getTime() / 1000).toFixed()}${user.id}`)
 
-        const signature = service.getSignature(shopId, price, apiKey, 'USD', payment.id)
+        const signature = service.getSignature(shopId, price, secretKey1, 'USD', payment.id)
 
         const link = `https://pay.freekassa.ru/?m=${shopId}&oa=${price}&i=&currency=USD&o=${payment.id}&s=${signature}&em=${user.email}`;
 
