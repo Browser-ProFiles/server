@@ -1,7 +1,7 @@
 const CryptoJS = require('crypto-js');
 
 class FreekassaService {
-    getSignature(form, key) {
+    getSignatureSha256(form, key) {
         let signString = '';
 
         const keys = Object.keys(form).sort((a, b) => a.localeCompare(b));
@@ -14,6 +14,11 @@ class FreekassaService {
         console.log(hash.toString());
 
         return hash.toString();
+    }
+
+    getSignature(shopId, amount, secret, currency = 'USD') {
+        const str = `${shopId}:${amount}:${secret}:${currency}`;
+        return crypto.createHash('md5').update(str).digest('hex');
     }
 }
 

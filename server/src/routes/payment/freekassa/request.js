@@ -3,8 +3,6 @@ const User = db.user;
 const Subscription = db.subscription;
 const Payment = db.payment;
 
-const axios = require('axios');
-
 const FreekassaService = require('../../../services/freekassa');
 const {
     PAYMENT_METHOD_FREEKASSA,
@@ -15,11 +13,10 @@ module.exports = async (req, res) => {
     try {
         const ip = req.headers['X-FORWARDED-FOR'] || req.connection.remoteAddress;
 
-        const freekassaUrl = process.env.FREEKASSA_URL;
         const apiKey = process.env.FREEKASSA_API_KEY;
         const shopId = process.env.FREEKASSA_SHOP_ID;
 
-        if (!freekassaUrl || !apiKey || !shopId) {
+        if (!apiKey || !shopId) {
             throw new Error(req.appLang === 'en' ? 'Incorrect settings' : 'Некорректные настройки');
         }
 
@@ -51,42 +48,22 @@ module.exports = async (req, res) => {
 
         const payment = await Payment.create({
             subscriptionId: subscriptionId,
-            method: PAYMENT_METHOD_FREEKASSA,
+            userId: user.id,
             price,
-            details: JSON.stringify({}),
+            details: JSON.stringify({ ip }),
+            method: PAYMENT_METHOD_FREEKASSA,
             status: PAYMENT_STATUS_CREATED,
         });
 
         // Number(`${(new Date().getTime() / 1000).toFixed()}${user.id}`)
-        const form = {
-            amount: price,
-            currency: 'USD',
-            email: user.email,
-            ip: '46.191.138.6',
-            nonce: new Date().getTime(),
-            paymentId: payment.id,
-            shopId: Number(shopId),
-        };
 
-        const signature = service.getSignature(form, apiKey);
+        const signature = service.getSignature(shopId, price, apiKey, 'USD')
 
-        console.log('signature', signature)
-        console.log('data', {
-            ...form,
-            paymentId: payment.id,
-            signature,
-        })
-
-        const { data } = await axios.post(`${freekassaUrl}/orders/create`, {
-            ...form,
-            paymentId: payment.id,
-            signature,
-        });
+        const link = `https://pay.freekassa.ru/?m=${shopId}&oa=${price}&i=&currency=USD&o=${payment.id}&s=${signature}&em=${user.email}`;
 
         res.json({
             status: 'success',
-            orderId: data.orderId,
-            location: data.location,
+            location: link,
         });
     } catch (e) {
         console.error(e.response?.data)
