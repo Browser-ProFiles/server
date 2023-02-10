@@ -1,5 +1,3 @@
-const { subscription } = require('../../../middlewares');
-
 const db = require('../../../models');
 const Payment = db.payment;
 const User = db.user;
