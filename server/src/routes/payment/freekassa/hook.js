@@ -107,7 +107,7 @@ module.exports = async (req, res) => {
         console.log('currentTime', currentTime);
         console.log('oneMonth', oneMonth);
         console.log('newUntilDate', newUntilDate);
-        await User.update({
+        await user.update({
             subscriptionId: subscription.id,
             subscriptionActiveUntil: newUntilDate,
         });
