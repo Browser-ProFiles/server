@@ -78,7 +78,7 @@ module.exports = async (req, res) => {
 
         const subscription = await Subscription.findOne({
             where: {
-                id: payment.userId,
+                id: payment.subscriptionId,
             },
         });
         if (!subscription) {
