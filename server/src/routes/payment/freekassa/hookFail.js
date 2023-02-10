@@ -1,10 +1,8 @@
 module.exports = async (req, res) => {
     try {
-        console.log('HOOK FAIL', req)
+        const frontendUrl = process.env.FRONTEND_URL;
 
-        res.json({
-            status: 'success',
-        });
+        res.redirect(`${frontendUrl}/payment?status=fail`);
     } catch (e) {
         console.error(e);
 
