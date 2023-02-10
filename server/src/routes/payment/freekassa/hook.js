@@ -9,10 +9,11 @@ module.exports = async (req, res) => {
     try {
         console.log('HOOK', req);
 
-        const ip = req.headers['X-FORWARDED-FOR'] || req.connection.remoteAddress;
+        // TODO: Add check
+        /*const ip = req.headers['X-FORWARDED-FOR'] || req.connection.remoteAddress;
         if (!FREEKASSA_IP_LIST.includes(ip)) {
             throw new Error('Access denied');
-        }
+        }*/
 
         const shopId = req.body['MERCHANT_ID'];
         const amount = req.body['AMOUNT'];
