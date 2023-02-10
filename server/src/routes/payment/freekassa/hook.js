@@ -1,3 +1,10 @@
+const { subscription } = require('../../../middlewares');
+
+const db = require('../../../models');
+const Payment = db.payment;
+const User = db.user;
+const Subscription = db.subscription;
+
 const FREEKASSA_IP_LIST = [
     '168.119.157.136',
     '168.119.60.227',
@@ -43,11 +50,71 @@ module.exports = async (req, res) => {
             throw new Error('Incorrect sign');
         }
 
+        const payment = await Payment.findOne({
+            where: {
+                id: paymentId,
+            },
+        });
+        console.log('payment', payment);
+        if (!payment) {
+            throw new Error('Payment not found');
+        }
+
+        console.log('payment.price', payment.price)
+        console.log('amount', amount)
+        if (Number(payment.price) !== Number(amount)) {
+            throw new Error('Incorrect amount');
+        }
+
+        const user = await User.findOne({
+            attributes: ['id', 'username', 'subscriptionId', 'subscriptionActiveUntil'],
+            where: {
+                id: payment.userId,
+            },
+        });
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        const subscription = await Subscription.findOne({
+            where: {
+                id: payment.userId,
+            },
+        });
+        if (!subscription) {
+            throw new Error('Subscription not found');
+        }
+        if (Number(subscription.price) !== Number(amount)) {
+            throw new Error('Incorrect amount');
+        }
+
+        // +1 month
+        const subscriptionActiveUntil = Number(user.subscriptionActiveUntil);
+        const currentTime = Number((new Date().getTime() / 1000).toFixed());
+        console.log('subscriptionActiveUntil', subscriptionActiveUntil)
+        console.log('currentTime', currentTime);
+
+        const oneMonth = 60 * 60 * 24 * 30;
+
+        // TODO: Fix with subscription dates
+        let newUntilDate;
+        if (subscriptionActiveUntil < currentTime || user.subscriptionId !== subscription.id) {
+            newUntilDate = currentTime + oneMonth;
+        } else {
+            newUntilDate = currentTime + oneMonth;
+        }
+
+        console.log('currentTime', currentTime);
+        console.log('oneMonth', oneMonth);
+        console.log('newUntilDate', newUntilDate);
+        await User.update({
+            subscriptionId: subscription.id,
+            subscriptionActiveUntil: newUntilDate,
+        });
+
         console.log('SUCCESS');
 
-        res.json({
-            status: 'success',
-        });
+        res.send('SUCCESS');
     } catch (e) {
         console.error('error', e);
 

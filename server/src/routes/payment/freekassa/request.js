@@ -22,7 +22,6 @@ module.exports = async (req, res) => {
         }
 
         const subscriptionId = req.body.subscriptionId;
-
         const subscription = await Subscription.findOne({
             where: {
                 id: subscriptionId,
