@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const db = require('../../../models');
 const Payment = db.payment;
 const User = db.user;
