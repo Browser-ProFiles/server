@@ -1,5 +1,6 @@
 const db = require('../models');
 const User = db.user;
+const Subscription = db.subscription;
 
 const hasEnoughSubscription = async (req, res, next) => {
     try {
@@ -16,8 +17,15 @@ const hasEnoughSubscription = async (req, res, next) => {
             }
         }
 
+        let subscriptionId = user.subscriptionId;
+        const now = (new Date().getTime()) / 1000;
+        if (user.subscriptionActiveUntil <= now) {
+            // With max profiles = 2 (free sub)
+            subscriptionId = 1;
+        }
+        const subscription = await Subscription.findByPk(subscriptionId);
+
         const profiles = await user.getProfiles();
-        const subscription = await user.getSubscription();
         if (subscription.maxProfiles <= profiles.length) {
             return res.status(403).send({
                 status: 'error',

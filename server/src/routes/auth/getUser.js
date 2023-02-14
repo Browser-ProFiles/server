@@ -28,10 +28,21 @@ module.exports = async (req, res) => {
       throw new Error(req.appLang === 'en' ? 'Invalid user subscription.' : 'Некорректная подиска');
     }
 
+    let subscriptionActiveUntil = user.subscriptionActiveUntil;
+    let subscriptionId = user.subscriptionId;
+    const now = (new Date().getTime()) / 1000;
+    if (user.subscriptionActiveUntil <= now) {
+      // With max profiles = 2 (free sub)
+      subscriptionId = 1;
+
+      const newDate = Number(user.subscriptionActiveUntil) + (10 * 365 * 24 * 60 * 60);
+      subscriptionActiveUntil = newDate;
+    }
+
     const subscription = await Subscription.findOne({
       attributes: ['id', 'name', 'maxProfiles', 'price'],
       where: {
-        id: user.subscriptionId,
+        id: subscriptionId,
       },
     });
 
@@ -50,7 +61,7 @@ module.exports = async (req, res) => {
         name: subscription.name,
         maxProfiles: subscription.maxProfiles,
         price: subscription.price,
-        activeUntil: user.subscriptionActiveUntil,
+        activeUntil: subscriptionActiveUntil,
       }
     });
   } catch (e) {

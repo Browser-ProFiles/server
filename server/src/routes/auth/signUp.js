@@ -57,9 +57,9 @@ module.exports = async (req, res) => {
         // Password
         const passwordHash = bcrypt.hashSync(req.body.password, 8);
 
-        // FREE TRIAL 1 month
+        // +10 years of free sub
         const subscriptionActiveUntil = new Date();
-        subscriptionActiveUntil.setMonth(subscriptionActiveUntil.getMonth() + 1);
+        subscriptionActiveUntil.setFullYear(subscriptionActiveUntil.getFullYear() + 10);
         const activeTimeSeconds = Math.round(subscriptionActiveUntil.getTime() / 1000);
 
         // Confirm token

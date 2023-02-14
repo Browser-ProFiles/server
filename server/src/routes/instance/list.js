@@ -15,9 +15,16 @@ module.exports = async (req, res) => {
       throw new Error(req.appLang === 'en' ? 'User not found.' : 'Пользователь не найден')
     }
 
+    let subscriptionId = user.subscriptionId;
+    const now = (new Date().getTime()) / 1000;
+    if (user.subscriptionActiveUntil <= now) {
+      // With max profiles = 2 (free sub)
+      subscriptionId = 1;
+    }
+
     const subscription = await Subscription.findOne({
       where: {
-        id: user.subscriptionId,
+        id: subscriptionId,
       },
     });
 
