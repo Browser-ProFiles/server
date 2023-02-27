@@ -59,7 +59,7 @@ module.exports = async (req, res) => {
 
         const signature = service.getSignature(shopId, price, secretKey1, 'USD', payment.id)
 
-        const link = `https://pay.freekassa.ru/?m=${shopId}&oa=${price}&i=&currency=USD&o=${payment.id}&s=${signature}&em=${user.email}`;
+        const link = `https://pay.freekassa.ru/?m=${shopId}&oa=${price}&i=&currency=USD&o=${payment.id}&s=${signature}&em=${user.email}&lang=ru`;
 
         res.json({
             status: 'success',
