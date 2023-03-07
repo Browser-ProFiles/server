@@ -10,6 +10,12 @@ module.exports = async (req, res) => {
       }
     });
 
+    if (!profile) {
+      return res.status(404).send({
+        status: 'error',
+      });
+    }
+
     res.json({
       ...profile,
       options: JSON.parse(profile.options),
