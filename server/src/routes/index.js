@@ -20,6 +20,7 @@ const freekassaHookSuccess = require('./payment/freekassa/hookSuccess');
 const generateFingerprint = require('./utils/generateFingerprint');
 const browserRevisions = require('./utils/browserRevisions');
 const subscriptionsList = require('./utils/subscriptions');
+const appVersion = require('./utils/appVersion');
 
 const router = express.Router();
 
@@ -46,5 +47,6 @@ router.post('/payment/error/freekassa', [], freekassaHookFail);
 router.post('/generate/fingerprint', [authJwt.verify], generateFingerprint);
 router.get('/browser/versions', [authJwt.verify], browserRevisions);
 router.get('/subscriptions/list', [], subscriptionsList);
+router.get('/app/version', [], appVersion);
 
 module.exports = router;
