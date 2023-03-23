@@ -27,6 +27,7 @@
     <li>Clone this repo</li>
     <li>Rename .env.example to .env and change values</li>
     <li>Run:</li>
+</ol>
 </p>
 
     cd client
