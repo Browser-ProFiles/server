@@ -30,7 +30,7 @@
 </ol>
 </p>
 
-    cd client
+    cd server
     npm i
     npm run dev
 
